@@ -1,49 +1,58 @@
-import utils
-from pyvis.network import Network
-import networkx as nx
-import webbrowser
+from src.node import network
+import node
 
-g = nx.Graph()
-for i in utils.nodeName:
-    g.add_node(i)
-for i in utils.edge:
-    g.add_edge(i[0], i[1])
-
-# Create PyVis network
-net = Network(
-    notebook=False,
-    width="100%",
-    height="100vh",
-    bgcolor="#222222",
-    font_color="white",
-    cdn_resources='in_line',
-)
-
-net.title = "Network Reliability System"
-net.from_nx(g)
-
-
-net.set_options("""
-var options = {
-  "configure": {
-    "enabled": false
-  },
-  "physics": {
-    "enabled": true,
-    "stabilization": {"iterations": 100}
-  }
+type_scores = {
+    "Server": 5,
+    "Router": 4,
+    "Faculty": 3,
+    "Department": 2,
+    "PC" : 1
 }
-""")
-
-html_file = "sad.html"
-html_content = net.generate_html()
 
 
-html_content = html_content.replace('height="800px"', 'height="100vh"')
-html_content = html_content.replace('style="', 'style="margin: 0; padding: 0; ')
+def DFS(source):
+    impact=0
+    isvisted={network[i].Name:False for i in network}
+    q=[source]
+    isvisted[source]=True
+    while q:
+        u=q.pop(0)
+        # print(u)
 
-with open(html_file, "w", encoding="utf-8") as f:
-    f.write(html_content)
+        for i in network[u].route :
+            if not isvisted[i] and type_scores[network[u].Type]>=type_scores[network[i].Type]:
+                q.append(i)
+                isvisted[i]=True
+                if type_scores[network[i].Type]==1:
+                    impact += 1
 
-print(f"Graph saved successfully as {html_file}")
-webbrowser.open("sad.html")
+    return impact
+
+def find_score():
+    for name in network:
+        impact=DFS(name)
+        network[name].set_critical_score(impact)
+
+
+def get_critical_score():
+    find_score()
+    Critical_score = []
+    for name in network:
+        score = float(network[name].Score)
+        score = round(score, 2)
+        Critical_score.append((name,network[name].imapct,network[name].Reliability,score))
+        print(network[name].imapct)
+
+    return Critical_score
+
+
+if __name__=="__main__":
+    x = input("Enter node Name: ")
+    # print(DFS(x))
+    find_score()
+    # for i in network:
+    #         print(
+    #             str(network[i].Name) + " "+
+    #             str("%.2f" % network[i].Score)
+    #         )
+    get_critical_score()

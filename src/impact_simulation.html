@@ -1,0 +1,175 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "gray", "font": {"color": "white"}, "id": "Server1", "label": "Server1", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "Router1", "label": "Router1", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "Router2", "label": "Router2", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "Router3", "label": "Router3", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "FST", "label": "FST", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "FBS", "label": "FBS", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "FSSS", "label": "FSSS", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "FASS", "label": "FASS", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "CSE", "label": "CSE", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "ICT", "label": "ICT", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "ES", "label": "ES", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "MARKETING", "label": "MARKETING", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "MANAGEMENT", "label": "MANAGEMENT", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LAW", "label": "LAW", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "IR", "label": "IR", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "MCJ", "label": "MCJ", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "SOCIOLOGY", "label": "SOCIOLOGY", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "ENGLISH", "label": "ENGLISH", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "ECON", "label": "ECON", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "DS", "label": "DS", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC1", "label": "LABPC1", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC2", "label": "LABPC2", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC3", "label": "LABPC3", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC4", "label": "LABPC4", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC5", "label": "LABPC5", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC6", "label": "LABPC6", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC7", "label": "LABPC7", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC8", "label": "LABPC8", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC9", "label": "LABPC9", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC10", "label": "LABPC10", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC11", "label": "LABPC11", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC12", "label": "LABPC12", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC13", "label": "LABPC13", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC14", "label": "LABPC14", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC15", "label": "LABPC15", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC16", "label": "LABPC16", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC17", "label": "LABPC17", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC18", "label": "LABPC18", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC19", "label": "LABPC19", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC20", "label": "LABPC20", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC21", "label": "LABPC21", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC22", "label": "LABPC22", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC23", "label": "LABPC23", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC24", "label": "LABPC24", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC25", "label": "LABPC25", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC26", "label": "LABPC26", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC27", "label": "LABPC27", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC28", "label": "LABPC28", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC29", "label": "LABPC29", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "LABPC30", "label": "LABPC30", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC1", "label": "TEACHERPC1", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC2", "label": "TEACHERPC2", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC3", "label": "TEACHERPC3", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC4", "label": "TEACHERPC4", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC5", "label": "TEACHERPC5", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC6", "label": "TEACHERPC6", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC7", "label": "TEACHERPC7", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC8", "label": "TEACHERPC8", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC9", "label": "TEACHERPC9", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC10", "label": "TEACHERPC10", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC11", "label": "TEACHERPC11", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC12", "label": "TEACHERPC12", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC13", "label": "TEACHERPC13", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC14", "label": "TEACHERPC14", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "TEACHERPC15", "label": "TEACHERPC15", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC1", "label": "OFFICEPC1", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC2", "label": "OFFICEPC2", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC3", "label": "OFFICEPC3", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC4", "label": "OFFICEPC4", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC5", "label": "OFFICEPC5", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC6", "label": "OFFICEPC6", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC7", "label": "OFFICEPC7", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC8", "label": "OFFICEPC8", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC9", "label": "OFFICEPC9", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC10", "label": "OFFICEPC10", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC11", "label": "OFFICEPC11", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC12", "label": "OFFICEPC12", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC13", "label": "OFFICEPC13", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC14", "label": "OFFICEPC14", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC15", "label": "OFFICEPC15", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC16", "label": "OFFICEPC16", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC17", "label": "OFFICEPC17", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC18", "label": "OFFICEPC18", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC19", "label": "OFFICEPC19", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC20", "label": "OFFICEPC20", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC21", "label": "OFFICEPC21", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC22", "label": "OFFICEPC22", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC23", "label": "OFFICEPC23", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC24", "label": "OFFICEPC24", "shape": "dot"}, {"color": "gray", "font": {"color": "white"}, "id": "OFFICEPC25", "label": "OFFICEPC25", "shape": "dot"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Server1", "to": "Router1"}, {"arrows": "to", "from": "Server1", "to": "Router2"}, {"arrows": "to", "from": "Server1", "to": "Router3"}, {"arrows": "to", "from": "Router1", "to": "Server1"}, {"arrows": "to", "from": "Router1", "to": "FST"}, {"arrows": "to", "from": "Router2", "to": "Server1"}, {"arrows": "to", "from": "Router2", "to": "FBS"}, {"arrows": "to", "from": "Router3", "to": "Server1"}, {"arrows": "to", "from": "Router3", "to": "FSSS"}, {"arrows": "to", "from": "Router3", "to": "FASS"}, {"arrows": "to", "from": "FST", "to": "Router1"}, {"arrows": "to", "from": "FST", "to": "CSE"}, {"arrows": "to", "from": "FST", "to": "ICT"}, {"arrows": "to", "from": "FST", "to": "ES"}, {"arrows": "to", "from": "FBS", "to": "Router2"}, {"arrows": "to", "from": "FBS", "to": "MARKETING"}, {"arrows": "to", "from": "FBS", "to": "MANAGEMENT"}, {"arrows": "to", "from": "FSSS", "to": "Router3"}, {"arrows": "to", "from": "FSSS", "to": "LAW"}, {"arrows": "to", "from": "FSSS", "to": "IR"}, {"arrows": "to", "from": "FSSS", "to": "MCJ"}, {"arrows": "to", "from": "FASS", "to": "Router3"}, {"arrows": "to", "from": "FASS", "to": "SOCIOLOGY"}, {"arrows": "to", "from": "FASS", "to": "ENGLISH"}, {"arrows": "to", "from": "FASS", "to": "ECON"}, {"arrows": "to", "from": "FASS", "to": "DS"}, {"arrows": "to", "from": "CSE", "to": "FST"}, {"arrows": "to", "from": "CSE", "to": "LABPC1"}, {"arrows": "to", "from": "CSE", "to": "LABPC2"}, {"arrows": "to", "from": "CSE", "to": "LABPC3"}, {"arrows": "to", "from": "CSE", "to": "LABPC4"}, {"arrows": "to", "from": "CSE", "to": "LABPC5"}, {"arrows": "to", "from": "CSE", "to": "LABPC6"}, {"arrows": "to", "from": "CSE", "to": "LABPC7"}, {"arrows": "to", "from": "CSE", "to": "LABPC8"}, {"arrows": "to", "from": "CSE", "to": "LABPC9"}, {"arrows": "to", "from": "CSE", "to": "LABPC10"}, {"arrows": "to", "from": "CSE", "to": "LABPC11"}, {"arrows": "to", "from": "CSE", "to": "LABPC12"}, {"arrows": "to", "from": "CSE", "to": "LABPC13"}, {"arrows": "to", "from": "CSE", "to": "LABPC14"}, {"arrows": "to", "from": "CSE", "to": "LABPC15"}, {"arrows": "to", "from": "CSE", "to": "LABPC16"}, {"arrows": "to", "from": "CSE", "to": "LABPC17"}, {"arrows": "to", "from": "CSE", "to": "LABPC18"}, {"arrows": "to", "from": "CSE", "to": "LABPC19"}, {"arrows": "to", "from": "CSE", "to": "LABPC20"}, {"arrows": "to", "from": "CSE", "to": "TEACHERPC1"}, {"arrows": "to", "from": "CSE", "to": "TEACHERPC2"}, {"arrows": "to", "from": "CSE", "to": "TEACHERPC3"}, {"arrows": "to", "from": "CSE", "to": "OFFICEPC1"}, {"arrows": "to", "from": "CSE", "to": "OFFICEPC2"}, {"arrows": "to", "from": "ICT", "to": "FST"}, {"arrows": "to", "from": "ICT", "to": "LABPC21"}, {"arrows": "to", "from": "ICT", "to": "LABPC22"}, {"arrows": "to", "from": "ICT", "to": "LABPC23"}, {"arrows": "to", "from": "ICT", "to": "LABPC24"}, {"arrows": "to", "from": "ICT", "to": "LABPC25"}, {"arrows": "to", "from": "ICT", "to": "LABPC26"}, {"arrows": "to", "from": "ICT", "to": "LABPC27"}, {"arrows": "to", "from": "ICT", "to": "LABPC28"}, {"arrows": "to", "from": "ICT", "to": "LABPC29"}, {"arrows": "to", "from": "ICT", "to": "LABPC30"}, {"arrows": "to", "from": "ICT", "to": "TEACHERPC5"}, {"arrows": "to", "from": "ICT", "to": "TEACHERPC4"}, {"arrows": "to", "from": "ICT", "to": "OFFICEPC3"}, {"arrows": "to", "from": "ICT", "to": "OFFICEPC4"}, {"arrows": "to", "from": "ICT", "to": "OFFICEPC5"}, {"arrows": "to", "from": "ES", "to": "FST"}, {"arrows": "to", "from": "ES", "to": "TEACHERPC10"}, {"arrows": "to", "from": "ES", "to": "OFFICEPC14"}, {"arrows": "to", "from": "ES", "to": "OFFICEPC15"}, {"arrows": "to", "from": "MARKETING", "to": "FBS"}, {"arrows": "to", "from": "MARKETING", "to": "TEACHERPC11"}, {"arrows": "to", "from": "MARKETING", "to": "OFFICEPC16"}, {"arrows": "to", "from": "MARKETING", "to": "OFFICEPC17"}, {"arrows": "to", "from": "MANAGEMENT", "to": "FBS"}, {"arrows": "to", "from": "MANAGEMENT", "to": "TEACHERPC12"}, {"arrows": "to", "from": "MANAGEMENT", "to": "OFFICEPC18"}, {"arrows": "to", "from": "MANAGEMENT", "to": "OFFICEPC19"}, {"arrows": "to", "from": "LAW", "to": "FSSS"}, {"arrows": "to", "from": "LAW", "to": "TEACHERPC13"}, {"arrows": "to", "from": "LAW", "to": "OFFICEPC20"}, {"arrows": "to", "from": "LAW", "to": "OFFICEPC21"}, {"arrows": "to", "from": "IR", "to": "FSSS"}, {"arrows": "to", "from": "IR", "to": "TEACHERPC14"}, {"arrows": "to", "from": "IR", "to": "OFFICEPC22"}, {"arrows": "to", "from": "IR", "to": "OFFICEPC23"}, {"arrows": "to", "from": "MCJ", "to": "FSSS"}, {"arrows": "to", "from": "MCJ", "to": "TEACHERPC15"}, {"arrows": "to", "from": "MCJ", "to": "OFFICEPC24"}, {"arrows": "to", "from": "MCJ", "to": "OFFICEPC25"}, {"arrows": "to", "from": "SOCIOLOGY", "to": "FASS"}, {"arrows": "to", "from": "SOCIOLOGY", "to": "TEACHERPC6"}, {"arrows": "to", "from": "SOCIOLOGY", "to": "OFFICEPC6"}, {"arrows": "to", "from": "SOCIOLOGY", "to": "OFFICEPC7"}, {"arrows": "to", "from": "ENGLISH", "to": "FASS"}, {"arrows": "to", "from": "ENGLISH", "to": "OFFICEPC8"}, {"arrows": "to", "from": "ENGLISH", "to": "OFFICEPC9"}, {"arrows": "to", "from": "ENGLISH", "to": "TEACHERPC7"}, {"arrows": "to", "from": "ECON", "to": "FASS"}, {"arrows": "to", "from": "ECON", "to": "TEACHERPC8"}, {"arrows": "to", "from": "ECON", "to": "OFFICEPC10"}, {"arrows": "to", "from": "ECON", "to": "OFFICEPC11"}, {"arrows": "to", "from": "DS", "to": "FASS"}, {"arrows": "to", "from": "DS", "to": "TEACHERPC9"}, {"arrows": "to", "from": "DS", "to": "OFFICEPC12"}, {"arrows": "to", "from": "DS", "to": "OFFICEPC13"}, {"arrows": "to", "from": "LABPC1", "to": "CSE"}, {"arrows": "to", "from": "LABPC2", "to": "CSE"}, {"arrows": "to", "from": "LABPC3", "to": "CSE"}, {"arrows": "to", "from": "LABPC4", "to": "CSE"}, {"arrows": "to", "from": "LABPC5", "to": "CSE"}, {"arrows": "to", "from": "LABPC6", "to": "CSE"}, {"arrows": "to", "from": "LABPC7", "to": "CSE"}, {"arrows": "to", "from": "LABPC8", "to": "CSE"}, {"arrows": "to", "from": "LABPC9", "to": "CSE"}, {"arrows": "to", "from": "LABPC10", "to": "CSE"}, {"arrows": "to", "from": "LABPC11", "to": "CSE"}, {"arrows": "to", "from": "LABPC12", "to": "CSE"}, {"arrows": "to", "from": "LABPC13", "to": "CSE"}, {"arrows": "to", "from": "LABPC14", "to": "CSE"}, {"arrows": "to", "from": "LABPC15", "to": "CSE"}, {"arrows": "to", "from": "LABPC16", "to": "CSE"}, {"arrows": "to", "from": "LABPC17", "to": "CSE"}, {"arrows": "to", "from": "LABPC18", "to": "CSE"}, {"arrows": "to", "from": "LABPC19", "to": "CSE"}, {"arrows": "to", "from": "LABPC20", "to": "CSE"}, {"arrows": "to", "from": "LABPC21", "to": "ICT"}, {"arrows": "to", "from": "LABPC22", "to": "ICT"}, {"arrows": "to", "from": "LABPC23", "to": "ICT"}, {"arrows": "to", "from": "LABPC24", "to": "ICT"}, {"arrows": "to", "from": "LABPC25", "to": "ICT"}, {"arrows": "to", "from": "LABPC26", "to": "ICT"}, {"arrows": "to", "from": "LABPC27", "to": "ICT"}, {"arrows": "to", "from": "LABPC28", "to": "ICT"}, {"arrows": "to", "from": "LABPC29", "to": "ICT"}, {"arrows": "to", "from": "LABPC30", "to": "ICT"}, {"arrows": "to", "from": "TEACHERPC1", "to": "CSE"}, {"arrows": "to", "from": "TEACHERPC2", "to": "CSE"}, {"arrows": "to", "from": "TEACHERPC3", "to": "CSE"}, {"arrows": "to", "from": "TEACHERPC4", "to": "ICT"}, {"arrows": "to", "from": "TEACHERPC5", "to": "ICT"}, {"arrows": "to", "from": "TEACHERPC6", "to": "SOCIOLOGY"}, {"arrows": "to", "from": "TEACHERPC7", "to": "ENGLISH"}, {"arrows": "to", "from": "TEACHERPC8", "to": "ECON"}, {"arrows": "to", "from": "TEACHERPC9", "to": "DS"}, {"arrows": "to", "from": "TEACHERPC10", "to": "ES"}, {"arrows": "to", "from": "TEACHERPC11", "to": "MARKETING"}, {"arrows": "to", "from": "TEACHERPC12", "to": "MANAGEMENT"}, {"arrows": "to", "from": "TEACHERPC13", "to": "LAW"}, {"arrows": "to", "from": "TEACHERPC14", "to": "IR"}, {"arrows": "to", "from": "TEACHERPC15", "to": "MCJ"}, {"arrows": "to", "from": "OFFICEPC1", "to": "CSE"}, {"arrows": "to", "from": "OFFICEPC2", "to": "CSE"}, {"arrows": "to", "from": "OFFICEPC3", "to": "ICT"}, {"arrows": "to", "from": "OFFICEPC4", "to": "ICT"}, {"arrows": "to", "from": "OFFICEPC5", "to": "ICT"}, {"arrows": "to", "from": "OFFICEPC6", "to": "SOCIOLOGY"}, {"arrows": "to", "from": "OFFICEPC7", "to": "SOCIOLOGY"}, {"arrows": "to", "from": "OFFICEPC8", "to": "ENGLISH"}, {"arrows": "to", "from": "OFFICEPC9", "to": "ENGLISH"}, {"arrows": "to", "from": "OFFICEPC10", "to": "ECON"}, {"arrows": "to", "from": "OFFICEPC11", "to": "ECON"}, {"arrows": "to", "from": "OFFICEPC12", "to": "DS"}, {"arrows": "to", "from": "OFFICEPC13", "to": "DS"}, {"arrows": "to", "from": "OFFICEPC14", "to": "ES"}, {"arrows": "to", "from": "OFFICEPC15", "to": "ES"}, {"arrows": "to", "from": "OFFICEPC16", "to": "MARKETING"}, {"arrows": "to", "from": "OFFICEPC17", "to": "MARKETING"}, {"arrows": "to", "from": "OFFICEPC18", "to": "MANAGEMENT"}, {"arrows": "to", "from": "OFFICEPC19", "to": "MANAGEMENT"}, {"arrows": "to", "from": "OFFICEPC20", "to": "LAW"}, {"arrows": "to", "from": "OFFICEPC21", "to": "LAW"}, {"arrows": "to", "from": "OFFICEPC22", "to": "IR"}, {"arrows": "to", "from": "OFFICEPC23", "to": "IR"}, {"arrows": "to", "from": "OFFICEPC24", "to": "MCJ"}, {"arrows": "to", "from": "OFFICEPC25", "to": "MCJ"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+    <script>
+    const order = ["CSE", "LABPC1", "LABPC2", "LABPC3", "LABPC4", "LABPC5", "LABPC6", "LABPC7", "LABPC8", "LABPC9", "LABPC10", "LABPC11", "LABPC12", "LABPC13", "LABPC14", "LABPC15", "LABPC16", "LABPC17", "LABPC18", "LABPC19", "LABPC20", "TEACHERPC1", "TEACHERPC2", "TEACHERPC3", "OFFICEPC1", "OFFICEPC2"];
+    let i = 0;
+    function highlightStep() {
+        if (i >= order.length) return;
+        const nodeId = order[i];
+        const node = network.body.nodes[nodeId];
+        if (node) {
+            node.setOptions({color: "orange"});
+        }
+        setTimeout(() => {
+            if (node) node.setOptions({color: "green"});
+            i++;
+            highlightStep();
+        }, 700);
+    }
+    highlightStep();
+    </script>
+    
+</body>
+</html>
